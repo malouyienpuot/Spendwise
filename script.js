@@ -1,17 +1,25 @@
 const budget = {
-  monthlyIncome: 0,
-  housing: 0,
-  groceries: 0,
-  utilities: 0,
-  transportation: 0,
-  otherExpenses: 0,
-  savingsGoal: 0,
+  monthlyIncome: 4500,
+  savingsGoal: 600,
 };
 
+const defaultExpenses = [
+  { name: "Housing", amount: 1500 },
+  { name: "Groceries", amount: 500 },
+  { name: "Utilities", amount: 250 },
+  { name: "Transportation", amount: 220 },
+  { name: "Other", amount: 350 },
+];
+
+let expenseRecords = defaultExpenses.map((expense) => ({ ...expense }));
+
 const form = document.getElementById("budget-form");
+const expenseForm = document.getElementById("expense-form");
+const expenseList = document.getElementById("expenseList");
 const totalExpensesElement = document.getElementById("totalExpenses");
 const remainingBalanceElement = document.getElementById("remainingBalance");
 const savingsRateElement = document.getElementById("savingsRate");
+const statusMessage = document.getElementById("statusMessage");
 
 function formatCurrency(value) {
   return new Intl.NumberFormat("en-US", {
@@ -21,33 +29,23 @@ function formatCurrency(value) {
 }
 
 function readBudgetData() {
-  const incomeInput = Number(document.getElementById("income").value);
-  const housingInput = Number(document.getElementById("housing").value);
-  const groceriesInput = Number(document.getElementById("groceries").value);
-  const utilitiesInput = Number(document.getElementById("utilities").value);
-  const transportationInput = Number(document.getElementById("transportation").value);
-  const otherExpensesInput = Number(document.getElementById("otherExpenses").value);
-  const savingsGoalInput = Number(document.getElementById("savingsGoal").value);
+  const monthlyIncome = Number(document.getElementById("income").value) || 0;
+  const savingsGoal = Number(document.getElementById("savingsGoal").value) || 0;
 
-  budget.monthlyIncome = incomeInput;
-  budget.housing = housingInput;
-  budget.groceries = groceriesInput;
-  budget.utilities = utilitiesInput;
-  budget.transportation = transportationInput;
-  budget.otherExpenses = otherExpensesInput;
-  budget.savingsGoal = savingsGoalInput;
+  budget.monthlyIncome = monthlyIncome;
+  budget.savingsGoal = savingsGoal;
 
   return budget;
 }
 
-function calculateTotalExpenses(budgetData) {
-  return (
-    budgetData.housing +
-    budgetData.groceries +
-    budgetData.utilities +
-    budgetData.transportation +
-    budgetData.otherExpenses
-  );
+function calculateTotalExpenses(expenses) {
+  let total = 0;
+
+  for (let index = 0; index < expenses.length; index += 1) {
+    total += Number(expenses[index].amount);
+  }
+
+  return total;
 }
 
 function calculateRemainingBalance(income, expenses, savingsGoal) {
@@ -62,9 +60,59 @@ function calculateSavingsRate(income, savingsGoal) {
   return (savingsGoal / income) * 100;
 }
 
+function getBudgetStatus(remainingBalance, savingsRateValue) {
+  if (remainingBalance < 0) {
+    return { message: "Warning: you are over budget. Reduce spending or increase income.", className: "danger" };
+  }
+
+  if (savingsRateValue < 10) {
+    return { message: "Keep an eye on savings. Your savings rate is below 10%.", className: "warning" };
+  }
+
+  if (remainingBalance > 1000) {
+    return { message: "Great job! You have a healthy budget cushion.", className: "success" };
+  }
+
+  return { message: "Your budget is balanced. You are on track for the month.", className: "neutral" };
+}
+
+function renderExpenseList() {
+  expenseList.innerHTML = "";
+
+  if (expenseRecords.length === 0) {
+    const emptyItem = document.createElement("li");
+    emptyItem.className = "expense-item";
+    emptyItem.innerHTML = "<span>No expenses added yet.</span>";
+    expenseList.appendChild(emptyItem);
+    return;
+  }
+
+  expenseRecords.forEach((expense, index) => {
+    const listItem = document.createElement("li");
+    listItem.className = "expense-item";
+
+    const expenseLabel = document.createElement("span");
+    expenseLabel.textContent = `${expense.name}: ${formatCurrency(expense.amount)}`;
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "remove-button";
+    removeButton.textContent = "Remove";
+    removeButton.addEventListener("click", () => {
+      expenseRecords.splice(index, 1);
+      renderExpenseList();
+      updateResults();
+    });
+
+    listItem.appendChild(expenseLabel);
+    listItem.appendChild(removeButton);
+    expenseList.appendChild(listItem);
+  });
+}
+
 function updateResults() {
   const budgetData = readBudgetData();
-  const totalExpenses = calculateTotalExpenses(budgetData);
+  const totalExpenses = calculateTotalExpenses(expenseRecords);
   const remainingBalance = calculateRemainingBalance(
     budgetData.monthlyIncome,
     totalExpenses,
@@ -74,10 +122,13 @@ function updateResults() {
     budgetData.monthlyIncome,
     budgetData.savingsGoal
   );
+  const status = getBudgetStatus(remainingBalance, savingsRate);
 
   totalExpensesElement.textContent = formatCurrency(totalExpenses);
   remainingBalanceElement.textContent = formatCurrency(remainingBalance);
   savingsRateElement.textContent = `${savingsRate.toFixed(2)}%`;
+  statusMessage.textContent = status.message;
+  statusMessage.className = `status ${status.className}`;
 
   console.log("SpendWise Budget Summary");
   console.log("Monthly income:", formatCurrency(budgetData.monthlyIncome));
@@ -105,33 +156,51 @@ function getPromptValue(message, defaultValue) {
 
 function collectBudgetPrompts() {
   const monthlyIncome = getPromptValue("Enter your monthly income:", "4500");
-  const housing = getPromptValue("Enter your housing cost:", "1500");
-  const groceries = getPromptValue("Enter your grocery spending:", "500");
-  const utilities = getPromptValue("Enter your utility cost:", "250");
-  const transportation = getPromptValue("Enter your transportation cost:", "220");
-  const otherExpenses = getPromptValue("Enter other monthly expenses:", "350");
   const savingsGoal = getPromptValue("Enter your savings goal:", "600");
 
   document.getElementById("income").value = monthlyIncome;
-  document.getElementById("housing").value = housing;
-  document.getElementById("groceries").value = groceries;
-  document.getElementById("utilities").value = utilities;
-  document.getElementById("transportation").value = transportation;
-  document.getElementById("otherExpenses").value = otherExpenses;
   document.getElementById("savingsGoal").value = savingsGoal;
-
   updateResults();
 }
 
 function loadExampleBudget() {
   document.getElementById("income").value = 5200;
-  document.getElementById("housing").value = 1700;
-  document.getElementById("groceries").value = 540;
-  document.getElementById("utilities").value = 240;
-  document.getElementById("transportation").value = 310;
-  document.getElementById("otherExpenses").value = 420;
   document.getElementById("savingsGoal").value = 650;
 
+  expenseRecords = [
+    { name: "Housing", amount: 1700 },
+    { name: "Groceries", amount: 540 },
+    { name: "Utilities", amount: 240 },
+    { name: "Transportation", amount: 310 },
+    { name: "Other", amount: 420 },
+  ];
+
+  renderExpenseList();
+  updateResults();
+}
+
+function addExpense(event) {
+  event.preventDefault();
+
+  const expenseName = document.getElementById("expenseName").value.trim();
+  const expenseAmount = Number(document.getElementById("expenseAmount").value);
+
+  if (!expenseName || Number.isNaN(expenseAmount) || expenseAmount <= 0) {
+    statusMessage.textContent = "Please enter a valid expense name and amount.";
+    statusMessage.className = "status warning";
+    return;
+  }
+
+  expenseRecords.push({ name: expenseName, amount: expenseAmount });
+  expenseForm.reset();
+  document.getElementById("expenseName").focus();
+  renderExpenseList();
+  updateResults();
+}
+
+function clearExpenseList() {
+  expenseRecords = [];
+  renderExpenseList();
   updateResults();
 }
 
@@ -140,7 +209,10 @@ form.addEventListener("submit", function (event) {
   updateResults();
 });
 
+expenseForm.addEventListener("submit", addExpense);
+document.getElementById("clearExpenses").addEventListener("click", clearExpenseList);
 document.getElementById("promptButton").addEventListener("click", collectBudgetPrompts);
 document.getElementById("sampleButton").addEventListener("click", loadExampleBudget);
 
+renderExpenseList();
 updateResults();

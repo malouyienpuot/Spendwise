@@ -1,62 +1,79 @@
 # SpendWise
 
-SpendWise is a simple monthly budget planner that helps users track income, expenses, and savings goals. The app lets a person enter financial data to understand how much money remains after paying fixed and variable costs. This makes the project useful for everyday budgeting and for learning how JavaScript can work with real data.
+SpendWise is an interactive monthly budgeting dashboard that helps users track income, manage expenses, and evaluate whether their current plan is healthy. This week, the project was improved to support dynamic updates, condition-based budget feedback, and user-driven expense tracking.
 
-## JavaScript concepts implemented
+## Improvements made this week
 
-This project applies core JavaScript concepts from the course:
+The updated SpendWise app now includes:
 
-- Variables store financial values such as income, expenses, and the savings target.
-- Data types include numbers for money values and strings for labels and messages.
-- User input is collected through form fields and browser prompts.
-- Calculations are used to total monthly spending and determine the remaining balance.
-- Functions organize repeated logic so the code stays clear and reusable.
+- A cleaner budget dashboard with real-time calculations
+- A dynamic expense list that lets users add or remove spending items
+- Conditional messages that tell the user if they are over budget or saving well
+- Event-driven interactions for buttons, forms, and list actions
+- DOM updates that refresh values directly on the page without reloading the browser
 
-## How variables are being used
+## How conditionals are used
 
-The app uses variables to keep budget information easy to manage. For example, the monthly income, housing cost, grocery spending, utilities, transportation, and other expenses are each stored in variables. These values are later used to calculate total spending and the remaining balance.
+Conditionals allow the app to evaluate budget conditions and respond with useful feedback. For example:
 
-## How user input is collected
+- If the remaining balance is below zero, the app shows a danger message and warns that the user is over budget.
+- If the savings rate is less than 10%, the app displays a warning about low savings.
+- If the remaining balance is large enough, the application marks the budget as healthy and successful.
 
-SpendWise collects user input in two ways:
+This logic is handled in the `getBudgetStatus()` function, which decides the message and status class shown to the user.
 
-1. Form fields in the browser let the user type numbers into the page.
-2. The app also uses `prompt()` to gather budget information when the user clicks the "Use Input Prompts" button.
+## How arrays are used to store data
 
-Once numbers are entered, the program stores them in variables and updates the page instantly.
+The application stores multiple expense records in an array called `expenseRecords`. Each item in the array contains an expense name and an amount, such as:
 
-## How calculations are performed
+- Housing
+- Groceries
+- Utilities
+- Transportation
+- Other
 
-The app performs the following calculations:
+The program uses loops to iterate through the array, sum all amounts, and render each expense in the browser. This makes it easy to manage multiple records without creating separate variables for every expense.
 
-- Total expenses = housing + groceries + utilities + transportation + other expenses
-- Remaining balance = monthly income - total expenses - savings goal
-- Savings rate = (savings goal / monthly income) * 100
+## How the DOM is updated
 
-These calculations are completed in JavaScript and displayed in labeled result boxes and in the browser console.
+The Document Object Model (DOM) is updated directly in JavaScript so the web page changes in real time. The app updates:
 
-## How functions help organize the code
+- Total expenses
+- Remaining balance
+- Savings rate
+- Budget status message
+- The list of expense items on the page
 
-The application uses functions to separate the logic into reusable blocks:
+This is done through DOM methods such as `document.getElementById()`, `textContent`, `createElement()`, and `appendChild()`.
 
-- `readBudgetData()` reads values from the HTML form and stores them in the budget object.
-- `calculateTotalExpenses()` totals all spending categories.
-- `calculateRemainingBalance()` determines how much money is left after expenses and savings.
-- `calculateSavingsRate()` measures the savings percentage.
-- `updateResults()` refreshes the user interface and logs the summary to the console.
+## How user interactions are handled through events
 
-This structure makes the code easier to read, update, and maintain.
+SpendWise responds to browser events so users can interact with the application naturally. Examples include:
+
+- Clicking "Calculate Budget" triggers the submit event for the budget form.
+- Clicking "Add Expense" adds a new item to the expense array and re-renders the list.
+- Clicking "Remove" deletes an expense from the array.
+- Clicking "Use Input Prompts" asks for values using a prompt and then updates the page.
+
+These user actions are managed through event listeners such as `addEventListener("submit", ...)` and `addEventListener("click", ...)`.
+
+## Challenges encountered and how they were resolved
+
+One challenge was making the app work reliably in different browser contexts, especially when using prompts. Some environments block `prompt()` or do not support it in the same way. To resolve this, the app includes a safe fallback that uses the default value when a prompt is unavailable and still allows the budget logic to continue running.
+
+Another challenge was keeping the logic organized as the app grew. This was solved by separating responsibilities into functions like `readBudgetData()`, `calculateTotalExpenses()`, `renderExpenseList()`, and `updateResults()`. That structure keeps the code easier to maintain and understand.
 
 ## How to run the project
 
 1. Open `index.html` in a browser.
-2. Enter your monthly budget values or click the example button.
-3. Click "Calculate Budget" to display the results.
-4. Open the browser developer console to view labeled budget logs.
+2. Enter your income and savings goal.
+3. Add one or more expenses to the expense list.
+4. Click "Calculate Budget" to update the dashboard.
+5. Review the status message and spending summary.
 
 ## Files in this project
 
-- `index.html` — page layout and form structure
-- `style.css` — styling for the budgeting dashboard
-- `script.js` — budget calculations and interactive logic
-
+- `index.html` — page structure and interactive form layout
+- `style.css` — dashboard styling and status colors
+- `script.js` — JavaScript logic, arrays, conditionals, and event handling
+- `README.md` — project overview and assignment explanation
