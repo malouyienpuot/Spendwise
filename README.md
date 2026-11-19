@@ -1,79 +1,92 @@
-# SpendWise
+# SpendWise – Monthly Budget Planner
 
-SpendWise is an interactive monthly budgeting dashboard that helps users track income, manage expenses, and evaluate whether their current plan is healthy. This week, the project was improved to support dynamic updates, condition-based budget feedback, and user-driven expense tracking.
+## Project Description
 
-## Improvements made this week
+SpendWise is a responsive, interactive monthly budgeting dashboard. It helps users enter their monthly income and savings goal, record expenses, and understand their remaining balance and savings rate. The dashboard also provides budget-status feedback to help users notice when they are over budget or maintaining a healthy balance.
 
-The updated SpendWise app now includes:
+## Technologies Used
 
-- A cleaner budget dashboard with real-time calculations
-- A dynamic expense list that lets users add or remove spending items
-- Conditional messages that tell the user if they are over budget or saving well
-- Event-driven interactions for buttons, forms, and list actions
-- DOM updates that refresh values directly on the page without reloading the browser
+- **HTML5** – page structure and accessible form controls
+- **CSS3** – responsive layout, styling, and status indicators
+- **JavaScript (Vanilla JS)** – budget calculations, expense management, DOM updates, and event handling
+- **Git and GitHub** – source control and project hosting
+- **Netlify** – live website hosting and continuous deployment
 
-## How conditionals are used
+## GitHub Repository Information
 
-Conditionals allow the app to evaluate budget conditions and respond with useful feedback. For example:
+- **Repository:** [Spendwise](https://github.com/malouyienpuot/Spendwise)
+- **Owner:** malouyienpuot
+- **Default branch:** `main`
+- **Visibility:** Public
 
-- If the remaining balance is below zero, the app shows a danger message and warns that the user is over budget.
-- If the savings rate is less than 10%, the app displays a warning about low savings.
-- If the remaining balance is large enough, the application marks the budget as healthy and successful.
+## Live Netlify Website
 
-This logic is handled in the `getBudgetStatus()` function, which decides the message and status class shown to the user.
+[https://spendwise-tracker2.netlify.app/](https://spendwise-tracker2.netlify.app/)
 
-## How arrays are used to store data
+## Main Features
 
-The application stores multiple expense records in an array called `expenseRecords`. Each item in the array contains an expense name and an amount, such as:
+- Enter monthly income and a savings target.
+- Add expenses with a name and amount.
+- Remove individual expenses or clear the expense list.
+- Calculate total expenses, remaining balance, and savings rate.
+- Receive a status message based on the budget results.
+- Load an example budget to explore the dashboard.
+- Use the responsive layout on desktop and mobile screens.
 
-- Housing
-- Groceries
-- Utilities
-- Transportation
-- Other
+## Project Structure
 
-The program uses loops to iterate through the array, sum all amounts, and render each expense in the browser. This makes it easy to manage multiple records without creating separate variables for every expense.
+```text
+Spendwise/
+├── index.html   # Application structure and forms
+├── style.css    # Responsive design and visual styling
+├── script.js    # Budget calculations and interactive features
+└── README.md    # Project documentation and deployment notes
+```
 
-## How the DOM is updated
+## Deployment Process Summary
 
-The Document Object Model (DOM) is updated directly in JavaScript so the web page changes in real time. The app updates:
+1. Reviewed the project files and confirmed that `index.html`, `style.css`, and `script.js` are in the repository root.
+2. Pushed the project source code to the public GitHub repository.
+3. Connected the GitHub repository to Netlify and selected the `main` branch for deployment.
+4. Configured the site as a static website. No build command is required; the publish directory is the repository root (`.`).
+5. Set the Netlify site name to **spendwise-tracker2**, giving the site the URL shown above.
+6. Added a visible deployment/version note to the application and committed the change to GitHub. With the repository connected to Netlify, a push to the selected branch triggers a new deployment automatically.
+7. Checked the live site and the main budgeting interactions.
 
-- Total expenses
-- Remaining balance
-- Savings rate
-- Budget status message
-- The list of expense items on the page
+## Testing Checklist
 
-This is done through DOM methods such as `document.getElementById()`, `textContent`, `createElement()`, and `appendChild()`.
+- [ ] Open the live Netlify URL and confirm the page loads.
+- [ ] Confirm the CSS styling is applied and the JavaScript runs.
+- [ ] Calculate a budget using different income and savings values.
+- [ ] Add an expense and confirm the totals update.
+- [ ] Remove an expense and clear the expense list.
+- [ ] Load the example budget and confirm the values change.
+- [ ] Check the layout on both desktop and mobile screen sizes.
+- [ ] After a new GitHub commit, check the Netlify Deploys page and confirm the latest deployment is published.
 
-## How user interactions are handled through events
+## Challenges Encountered During Deployment
 
-SpendWise responds to browser events so users can interact with the application naturally. Examples include:
+The main deployment tasks that require care are keeping the HTML, CSS, and JavaScript file paths correct, choosing the repository root as the publish directory for a plain static site, and confirming that Netlify is connected to the correct GitHub repository and branch. These are addressed by keeping the three application files together in the root directory and using the `main` branch for deployment.
 
-- Clicking "Calculate Budget" triggers the submit event for the budget form.
-- Clicking "Add Expense" adds a new item to the expense array and re-renders the list.
-- Clicking "Remove" deletes an expense from the array.
-- Clicking "Use Input Prompts" asks for values using a prompt and then updates the page.
+A further point to verify is that a successful GitHub push is followed by a completed Netlify deployment. The Netlify Deploys page provides the deployment status and build log if a deployment fails.
 
-These user actions are managed through event listeners such as `addEventListener("submit", ...)` and `addEventListener("click", ...)`.
+## Lessons Learned
 
-## Challenges encountered and how they were resolved
+- A simple HTML, CSS, and JavaScript project can be published without a build command.
+- GitHub provides version control and a central place to maintain the project.
+- Netlify can deploy a connected repository automatically whenever changes are pushed to the configured branch.
+- Correct file paths and publish-directory settings are important for static-site deployment.
+- Testing the live website is necessary because a project working locally does not by itself prove that the deployed version works.
+- Small updates followed by a GitHub push are a practical way to check the continuous-deployment workflow.
 
-One challenge was making the app work reliably in different browser contexts, especially when using prompts. Some environments block `prompt()` or do not support it in the same way. To resolve this, the app includes a safe fallback that uses the default value when a prompt is unavailable and still allows the budget logic to continue running.
+## Run the Project Locally
 
-Another challenge was keeping the logic organized as the app grew. This was solved by separating responsibilities into functions like `readBudgetData()`, `calculateTotalExpenses()`, `renderExpenseList()`, and `updateResults()`. That structure keeps the code easier to maintain and understand.
+1. Clone or download this repository.
+2. Open the project folder in a code editor.
+3. Open `index.html` in a browser, or use the VS Code Live Server extension.
+4. Enter income and savings details, then add expenses to try the budget planner.
 
-## How to run the project
+---
 
-1. Open `index.html` in a browser.
-2. Enter your income and savings goal.
-3. Add one or more expenses to the expense list.
-4. Click "Calculate Budget" to update the dashboard.
-5. Review the status message and spending summary.
-
-## Files in this project
-
-- `index.html` — page structure and interactive form layout
-- `style.css` — dashboard styling and status colors
-- `script.js` — JavaScript logic, arrays, conditionals, and event handling
-- `README.md` — project overview and assignment explanation
+**Project:** SpendWise  
+**Live site:** https://spendwise-tracker2.netlify.app/  
