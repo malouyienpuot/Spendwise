@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SpendWise</title>
+    <meta
+      name="description"
+      content="SpendWise is a simple monthly budget planner for tracking income, expenses, and savings."
+    />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>SpendWise | Monthly Budget Planner</title>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
   </head>
@@ -12,6 +17,7 @@
       <header class="header">
         <p class="eyebrow">Smart budgeting</p>
         <h1>SpendWise</h1>
+        <p>Plan your month. Track your spending. Grow your savings.</p>
       </header>
 
       <section class="card">
@@ -78,7 +84,14 @@
         </div>
       </section>
 
-      <div id="statusMessage" class="status neutral">Budget status will appear here.</div>
+      <div id="statusMessage" class="status neutral" role="status" aria-live="polite">
+        Budget status will appear here.
+      </div>
+
+      <footer class="footer">
+        <p>SpendWise · Monthly Budget Planner</p>
+        <p>Deployment update · November 2026</p>
+      </footer>
     </main>
   </body>
 </html>
