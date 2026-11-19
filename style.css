@@ -235,6 +235,19 @@ button:active {
   border-color: #f5c1b4;
 }
 
+.footer {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.footer p {
+  margin: 6px 0;
+}
+
 @media (max-width: 600px) {
   .container {
     padding-top: 28px;
